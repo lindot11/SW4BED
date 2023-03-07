@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using ModelManagement.Data;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +12,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<ModelManagementDb>(opt => opt.UseInMemoryDatabase("ModelList"));
+builder.Services.AddDbContext<ModelManagementDb>(opt => opt.UseSqlServer(
+    builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 
