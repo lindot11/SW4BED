@@ -34,14 +34,14 @@ namespace ModelManagement.Controllers
 
 		// POST: api/Expenses
 		[HttpPost]
-		public async Task<ActionResult<Expense>> PostExpense(Expense mDto)
+		public async Task<ActionResult<ExpenseDto>> PostExpense(ExpenseDto eDto)
         {
-            if (mDto == null)
+            if (eDto == null)
             {
                 return Problem("Entity set 'ModelManagementDb.Expenses'  is null.");
             }
 
-			var expense = _mapper.Map<Expense>(mDto);
+			var expense = _mapper.Map<Expense>(eDto);
 
 			_context.Expenses.Add(expense);
 

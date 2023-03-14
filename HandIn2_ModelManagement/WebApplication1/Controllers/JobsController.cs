@@ -1,161 +1,122 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ModelManagement.Data;
 using ModelManagement.Models;
 
 namespace ModelManagement.Controllers
 {
-    public class JobsController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class JobsController : ControllerBase
     {
         private readonly ModelManagementDb _context;
+        private readonly IMapper _mapper;
 
-        public JobsController(ModelManagementDb context)
+        public JobsController(ModelManagementDb context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        // GET: Jobs
-        public async Task<IActionResult> Index()
+        // GET: api/JobsController
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<JobDto>>> GetJobs()
         {
-              return View(await _context.Jobs.ToListAsync());
-        }
+	        var jobs = await _context.Jobs.ToListAsync();
 
-        // GET: Jobs/Details/5
-        public async Task<IActionResult> Details(long? id)
+	        return Ok(_mapper.Map<IEnumerable<JobDto>>(jobs));
+		}
+
+        // GET: api/JobsController/5
+		[HttpGet("{id}")]
+        public async Task<ActionResult<Job>> GetJob(long id)
         {
-            if (id == null || _context.Jobs == null)
-            {
-                return NotFound();
-            }
-
-            var job = await _context.Jobs
-                .FirstOrDefaultAsync(m => m.JobId == id);
-            if (job == null)
-            {
-                return NotFound();
-            }
-
-            return View(job);
-        }
-
-        // GET: Jobs/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Jobs/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("JobId,Customer,StartDate,Days,Location,Comments")] Job job)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(job);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(job);
-        }
-
-        // GET: Jobs/Edit/5
-        public async Task<IActionResult> Edit(long? id)
-        {
-            if (id == null || _context.Jobs == null)
-            {
-                return NotFound();
-            }
-
             var job = await _context.Jobs.FindAsync(id);
+
             if (job == null)
             {
                 return NotFound();
             }
-            return View(job);
+
+            return job;
         }
 
-        // POST: Jobs/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("JobId,Customer,StartDate,Days,Location,Comments")] Job job)
+        // PUT: api/JobsController/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutJob(long id, Job job)
         {
             if (id != job.JobId)
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            if (ModelState.IsValid)
+            _context.Entry(job).State = EntityState.Modified;
+
+            try
             {
-                try
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!JobExists(id))
                 {
-                    _context.Update(job);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!JobExists(job.JobId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
-                return RedirectToAction(nameof(Index));
             }
-            return View(job);
+
+            return NoContent();
         }
 
-        // GET: Jobs/Delete/5
-        public async Task<IActionResult> Delete(long? id)
+		// POST: api/JobsController
+		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		[HttpPost]
+		public async Task<ActionResult<JobDto>> PostModel(JobDto jobdto)
+		{
+			var job = _mapper.Map<Job>(jobdto);
+
+			//if (job == null)
+			//{
+			//	return Problem();
+			//}
+
+			_context.Jobs.Add(job);
+
+			await _context.SaveChangesAsync();
+
+			return Created(job.JobId.ToString(), job);
+		}
+
+		// DELETE: api/JobsController/5
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> DeleteJob(long id)
+		{
+			var job = await _context.Jobs.FindAsync(id);
+			if (job == null)
+			{
+				return NotFound();
+			}
+
+			_context.Jobs.Remove(job);
+			await _context.SaveChangesAsync();
+
+			return NoContent();
+		}
+
+		private bool JobExists(long id)
         {
-            if (id == null || _context.Jobs == null)
-            {
-                return NotFound();
-            }
-
-            var job = await _context.Jobs
-                .FirstOrDefaultAsync(m => m.JobId == id);
-            if (job == null)
-            {
-                return NotFound();
-            }
-
-            return View(job);
-        }
-
-        // POST: Jobs/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(long id)
-        {
-            if (_context.Jobs == null)
-            {
-                return Problem("Entity set 'ModelManagementDb.Jobs'  is null.");
-            }
-            var job = await _context.Jobs.FindAsync(id);
-            if (job != null)
-            {
-                _context.Jobs.Remove(job);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool JobExists(long id)
-        {
-          return _context.Jobs.Any(e => e.JobId == id);
+            return _context.Jobs.Any(e => e.JobId == id);
         }
     }
 }

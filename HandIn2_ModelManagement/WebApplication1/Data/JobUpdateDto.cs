@@ -1,14 +1,13 @@
-﻿using ModelManagement.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ModelManagement.Data
 {
-	public class JobDto
+	public class JobUpdateDto
 	{
 		public long JobId { get; }
 
 		[MaxLength(64)]
-		public string? Customer { get; set; }
+		public string? Customer { get;}
 
 		public DateTime StartDate { get; set; }
 
@@ -21,3 +20,4 @@ namespace ModelManagement.Data
 		public string? Comments { get; set; }
 	}
 }
+
