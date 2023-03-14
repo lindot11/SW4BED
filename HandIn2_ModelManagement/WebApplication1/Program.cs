@@ -44,6 +44,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapHub<StronglyTypedChatHub>("/chathub");
+app.MapHub<MessageHub>("/messageHub");
 
 app.Run();
