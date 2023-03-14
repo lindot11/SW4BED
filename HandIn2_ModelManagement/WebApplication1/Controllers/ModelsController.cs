@@ -26,7 +26,7 @@ namespace ModelManagement.Controllers
         }
 
         // GET: api/Models
-        [HttpGet]
+        [HttpGet("/all")]
         public async Task<ActionResult<IEnumerable<ModelDto>>> GetModels()
         {
 	        var models = await _context.Models.ToListAsync();
