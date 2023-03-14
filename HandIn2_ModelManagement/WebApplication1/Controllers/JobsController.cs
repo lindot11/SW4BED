@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using System.Threading.Tasks;
-using AutoMapper;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -35,60 +35,66 @@ namespace ModelManagement.Controllers
 		}
 
         // GET: api/JobsController/5
-		[HttpGet("{id}")]
-        public async Task<ActionResult<Job>> GetJob(long id)
+		// Gets job with all expenses
+		[HttpGet("{jobId}/Expenses")]
+        public async Task<ActionResult<JobExpensesDto>> GetJob(long jobId)
         {
-            var job = await _context.Jobs.FindAsync(id);
+            var job = await _context.Jobs.FindAsync(jobId);
 
             if (job == null)
             {
                 return NotFound();
             }
+#pragma warning disable CS8603 // Possible null reference return.
+			await _context.Entry(job)
+	            .Collection(j => j.Expenses)
+	            .LoadAsync();
+#pragma warning restore CS8603 // Possible null reference return.
 
-            return job;
+			var jobExpenses = _mapper.Map<JobExpensesDto>(job);
+
+            return jobExpenses;
         }
 
         // PUT: api/JobsController/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{jobId}")]
-        public async Task<IActionResult> PutJob(long jobId, JobUpdateDto newJob)
+        public async Task<IActionResult> PutJob(long jobId, JobUpdateDto updateJob)
         {
+	        var job = await _context.Jobs.FindAsync(jobId);
+
+	        if (job == null)
+	        {
+		        return NotFound();
+	        }
+
+			// Use Automapper to update the data:
+			_mapper.Map(updateJob, job);
+			_context.Entry(job).State = EntityState.Modified;
+
 	        try
 	        {
-		        var job = await _context.Jobs.FindAsync(jobId).ConfigureAwait(false);
-		        if (job == null)
-		        {
-			        ModelState.AddModelError("jobId", "jobId not found");
-			        return BadRequest(ModelState);
-		        }
-		        job.Comments = newJob.Comments;
-		        job.Customer = newJob.Customer;
-		        job.Days = newJob.Days;
-		        job.Location = newJob.Location;
-		        job.StartDate = newJob.StartDate;
-
 		        await _context.SaveChangesAsync();
 	        }
 	        catch (DbUpdateConcurrencyException)
 	        {
 		        if (!JobExists(jobId))
 		        {
-			        ModelState.AddModelError("jobId", "jobId not found");
-			        return BadRequest(ModelState);
+			        return NotFound();
 		        }
 		        else
 		        {
 			        throw;
 		        }
 	        }
-
-	        return NoContent();
+			// Returns 204 - meaning no need to update page. 
+			return NoContent();
         }
 
-		// POST: api/JobsController
+        // POST: api/JobsController
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		[HttpPost]
-		public async Task<ActionResult<Job>> PostModel(NewJobDto jobdto)
+		public async Task<ActionResult<Job>> PostJob(NewJobDto jobdto)
 		{
 			var job = _mapper.Map<Job>(jobdto);
 
@@ -101,7 +107,10 @@ namespace ModelManagement.Controllers
 
 			await _context.SaveChangesAsync();
 
-			return Created(job.JobId.ToString(), job);
+			//return NoContent();
+			var createdJob = _mapper.Map<JobDtoReturn>(job);
+			return CreatedAtAction("PostJob", new { id = job.JobId }, createdJob);
+			//return Created(job.JobId.ToString(), job);
 		}
 
 		// DELETE: api/JobsController/5

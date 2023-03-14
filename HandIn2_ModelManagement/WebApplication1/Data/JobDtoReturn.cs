@@ -2,8 +2,13 @@
 
 namespace ModelManagement.Data
 {
-	public class JobUpdateDto
+	public class JobDtoReturn
 	{
+		public long JobId { get; set; }
+
+		[MaxLength(64)]
+		public string? Customer { get; set; }
+
 		public DateTime StartDate { get; set; }
 
 		public int Days { get; set; }
@@ -15,4 +20,3 @@ namespace ModelManagement.Data
 		public string? Comments { get; set; }
 	}
 }
-

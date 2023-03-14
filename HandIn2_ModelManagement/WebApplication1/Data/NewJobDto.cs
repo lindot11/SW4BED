@@ -5,8 +5,6 @@ namespace ModelManagement.Data
 {
 	public class NewJobDto
 	{
-		public long JobId { get; }
-
 		[MaxLength(64)]
 		public string? Customer { get; set; }
 
