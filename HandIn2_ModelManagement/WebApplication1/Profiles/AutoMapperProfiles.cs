@@ -4,9 +4,9 @@ using ModelManagement.Models;
 
 namespace ModelManagement.Profiles
 {
-	public class ModelManagementProfile : Profile
+	public class AutoMapperProfiles : Profile
 	{
-		public ModelManagementProfile()
+		public AutoMapperProfiles()
 		{
 			CreateMap<Model, ModelDto>();
 			CreateMap<ModelDto, Model>();
