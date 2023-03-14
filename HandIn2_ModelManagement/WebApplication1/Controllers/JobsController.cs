@@ -82,7 +82,7 @@ namespace ModelManagement.Controllers
 		// POST: api/JobsController
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		[HttpPost]
-		public async Task<ActionResult<Job>> PostModel(JobDto jobdto)
+		public async Task<ActionResult<JobDto>> PostModel(JobDto jobdto)
 		{
 			var job = _mapper.Map<Job>(jobdto);
 
