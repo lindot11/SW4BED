@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.EntityFrameworkCore;
 using ModelManagement.Data;
 using ModelManagement.Models;
@@ -129,15 +130,11 @@ namespace ModelManagement.Controllers
 			return NoContent();
 		}
 
-		private bool JobExists(long id)
-        {
-            return _context.Jobs.Any(e => e.JobId == id);
-        }
+		
 
-
-		// PUT: api/jobController/models/5
+		// PUT: api/jobController/model/5
 		[HttpPut("model/{id}")]
-		public async Task<ActionResult<ModelDto>> PutModel(long id, ModelDto model)
+		public async Task<ActionResult<NewModelForJobDto>> PutModel(long id, NewModelForJobDto model)
 		{
 
 			var job = await _context.Jobs.FindAsync(id);
@@ -148,26 +145,10 @@ namespace ModelManagement.Controllers
 
 			var newModel = _mapper.Map<Model>(model);
 
-			if (newModel.Jobs == null)
-			{
-				newModel.Jobs = new List<Job>();
-				newModel.Jobs.Add(job);
-			}
-			else
-			{
-				newModel.Jobs.Add(job);
-			}
+			
+			newModel.Jobs = new List<Job> { job };
+			job.Models = new List<Model> { newModel };
 
-
-			if (job.Models == null)
-			{
-				job.Models = new List<Model>();
-				job.Models.Add(newModel);
-			}
-			else
-			{
-				job.Models.Add(newModel);
-			}
 
 			try
 			{
@@ -190,5 +171,52 @@ namespace ModelManagement.Controllers
 
 
 
-    }
+		// DELETE: api/JobsController/model/5
+		[HttpDelete("model/{id}")]
+		public async Task<ActionResult> DeleteModel(long id)
+		{
+			var job = await _context.Jobs.Include(d => d.Models).ToListAsync();
+			if (job == null)
+			{
+				return NotFound();
+			}
+
+			var currentjob =job.Find(x => x.JobId == id);
+			if (currentjob == null || currentjob.Models == null)
+			{
+				return NotFound();
+			}
+
+			currentjob.Models.RemoveAll(x => x.ModelId == 5);
+
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch (DbUpdateConcurrencyException)
+			{
+				if (!JobExists((id)))
+				{
+					return NotFound();
+				}
+				else
+				{
+					throw;
+				}
+			}
+
+			return NoContent();
+		}
+
+
+
+		private bool JobExists(long id)
+		{
+			return _context.Jobs.Any(e => e.JobId == id);
+		}
+
+
+
+
+	}
 }

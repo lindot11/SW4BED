@@ -21,6 +21,7 @@ namespace ModelManagement.Models
 
         public List<Model>? Models { get; set; }
 
+       
         public List<Expense>? Expenses { get; set; }
     }
 

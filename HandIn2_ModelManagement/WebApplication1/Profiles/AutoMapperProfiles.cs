@@ -21,6 +21,8 @@ namespace ModelManagement.Profiles
 			CreateMap<Job, JobExpensesDto>();
 			CreateMap<NewExpense, Expense>();
 			CreateMap<Expense, ExpenseDto>();
+			CreateMap<NewModelForJobDto, Model>();
+			CreateMap<Model, NewModelForJobDto>();
 
 		}
 	}
