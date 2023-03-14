@@ -35,17 +35,24 @@ namespace ModelManagement.Controllers
 		}
 
         // GET: api/JobsController/5
-		[HttpGet("{id}")]
-        public async Task<ActionResult<Job>> GetJob(long id)
+		// Gets job with all expenses
+		[HttpGet("{jobId}/Expenses")]
+        public async Task<ActionResult<JobExpensesDto>> GetJob(long jobId)
         {
-            var job = await _context.Jobs.FindAsync(id);
+            var job = await _context.Jobs.FindAsync(jobId);
 
             if (job == null)
             {
                 return NotFound();
             }
 
-            return job;
+            await _context.Entry(job)
+	            .Collection(j => j.Expenses)
+	            .LoadAsync();
+
+			var jobExpenses = _mapper.Map<JobExpensesDto>(job);
+
+            return jobExpenses;
         }
 
         // PUT: api/JobsController/5
@@ -60,15 +67,8 @@ namespace ModelManagement.Controllers
 		        return NotFound();
 	        }
 
-			// Update the job object with data from the DTO
-			//job.StartDate = updateJob.StartDate;
-			//job.Days = updateJob.Days;
-			//job.Location = updateJob.Location;
-			//job.Comments = updateJob.Comments;
-
+			// Use Automapper to update the data:
 			_mapper.Map(updateJob, job);
-
-
 			_context.Entry(job).State = EntityState.Modified;
 
 	        try
