@@ -1,9 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ModelManagement.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace ModelManagement.Data
 {
-	public class JobUpdateDto
+	public class NewJobDto
 	{
+		[MaxLength(64)]
+		public string? Customer { get; set; }
+
 		public DateTime StartDate { get; set; }
 
 		public int Days { get; set; }
@@ -15,4 +19,3 @@ namespace ModelManagement.Data
 		public string? Comments { get; set; }
 	}
 }
-

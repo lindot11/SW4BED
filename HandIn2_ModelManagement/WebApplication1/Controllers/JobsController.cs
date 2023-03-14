@@ -35,67 +35,85 @@ namespace ModelManagement.Controllers
 		}
 
         // GET: api/JobsController/5
-		[HttpGet("{id}")]
-        public async Task<ActionResult<Job>> GetJob(long id)
+		// Gets job with all expenses
+		[HttpGet("{jobId}/Expenses")]
+        public async Task<ActionResult<JobExpensesDto>> GetJob(long jobId)
         {
-            var job = await _context.Jobs.FindAsync(id);
+            var job = await _context.Jobs.FindAsync(jobId);
 
             if (job == null)
             {
                 return NotFound();
             }
 
-            return job;
+            await _context.Entry(job)
+	            .Collection(j => j.Expenses)
+	            .LoadAsync();
+
+			var jobExpenses = _mapper.Map<JobExpensesDto>(job);
+
+            return jobExpenses;
         }
 
         // PUT: api/JobsController/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutJob(long id, Job job)
+        [HttpPut("{jobId}")]
+        public async Task<IActionResult> PutJob(long jobId, JobUpdateDto updateJob)
         {
-            if (id != job.JobId)
-            {
-                return BadRequest();
-            }
+	        var job = await _context.Jobs.FindAsync(jobId);
 
-            _context.Entry(job).State = EntityState.Modified;
+	        if (job == null)
+	        {
+		        return NotFound();
+	        }
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!JobExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+			// Use Automapper to update the data:
+			_mapper.Map(updateJob, job);
+			_context.Entry(job).State = EntityState.Modified;
 
-            return NoContent();
+	        try
+	        {
+		        await _context.SaveChangesAsync();
+	        }
+	        catch (DbUpdateConcurrencyException)
+	        {
+		        if (!JobExists(jobId))
+		        {
+			        return NotFound();
+		        }
+		        else
+		        {
+			        throw;
+		        }
+	        }
+			// Returns 204 - meaning no need to update page. 
+			return NoContent();
         }
 
-		// POST: api/JobsController
+        // POST: api/JobsController
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		[HttpPost]
+<<<<<<< HEAD
 		public async Task<ActionResult<JobDto>> PostModel(JobDto jobdto)
+=======
+		public async Task<ActionResult<Job>> PostJob(NewJobDto jobdto)
+>>>>>>> jonas
 		{
 			var job = _mapper.Map<Job>(jobdto);
 
-			//if (job == null)
-			//{
-			//	return Problem();
-			//}
+            if (job == null)
+            {
+                return Problem();
+            }
 
-			_context.Jobs.Add(job);
+            _context.Jobs.Add(job);
 
 			await _context.SaveChangesAsync();
 
-			return Created(job.JobId.ToString(), job);
+			//return NoContent();
+			var createdJob = _mapper.Map<JobDtoReturn>(job);
+			return CreatedAtAction("PostJob", new { id = job.JobId }, createdJob);
+			//return Created(job.JobId.ToString(), job);
 		}
 
 		// DELETE: api/JobsController/5
