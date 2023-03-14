@@ -7,7 +7,9 @@ namespace ModelManagement.Data
 	{
 		public long JobId { get; set; }
 		public long ModelId { get; set; }
-		
+
+		[Column(TypeName = "date")]
+		public DateTime Date { get; set; }
 		public string? Text { get; set; }
 
 		[Column(TypeName = "decimal(9,2)")]

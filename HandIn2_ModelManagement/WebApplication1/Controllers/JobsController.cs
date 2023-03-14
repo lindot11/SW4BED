@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using System.Threading.Tasks;
-using AutoMapper;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -45,10 +45,11 @@ namespace ModelManagement.Controllers
             {
                 return NotFound();
             }
-
-            await _context.Entry(job)
+#pragma warning disable CS8603 // Possible null reference return.
+			await _context.Entry(job)
 	            .Collection(j => j.Expenses)
 	            .LoadAsync();
+#pragma warning restore CS8603 // Possible null reference return.
 
 			var jobExpenses = _mapper.Map<JobExpensesDto>(job);
 
@@ -93,11 +94,7 @@ namespace ModelManagement.Controllers
         // POST: api/JobsController
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		[HttpPost]
-<<<<<<< HEAD
-		public async Task<ActionResult<JobDto>> PostModel(JobDto jobdto)
-=======
 		public async Task<ActionResult<Job>> PostJob(NewJobDto jobdto)
->>>>>>> jonas
 		{
 			var job = _mapper.Map<Job>(jobdto);
 
