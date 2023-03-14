@@ -9,6 +9,8 @@ namespace ModelManagement.Profiles
 		public ModelManagementProfile()
 		{
 			CreateMap<Model, ModelDto>();
+			CreateMap<ModelDto, Model>();
+
 			CreateMap<Job, JobDto>();
 			CreateMap<Expense, ExpenseDto>();
 
