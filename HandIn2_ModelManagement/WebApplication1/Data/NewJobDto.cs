@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ModelManagement.Data
 {
-	public class JobDto
+	public class NewJobDto
 	{
-		public long JobId { get; set; }
+		public long JobId { get; }
 
 		[MaxLength(64)]
 		public string? Customer { get; set; }
@@ -19,6 +19,5 @@ namespace ModelManagement.Data
 
 		[MaxLength(2000)]
 		public string? Comments { get; set; }
-		public List<ModelName>? Models { get; set; }
 	}
 }
