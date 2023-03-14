@@ -124,5 +124,62 @@ namespace ModelManagement.Controllers
         {
             return _context.Jobs.Any(e => e.JobId == id);
         }
+
+
+		// PUT: api/jobController/models/5
+		[HttpPut("model/{id}")]
+		public async Task<ActionResult<ModelDto>> PutModel(long id, ModelDto model)
+		{
+
+			var job = await _context.Jobs.FindAsync(id);
+			if (job == null)
+			{
+				return Problem();
+			}
+
+			var newModel = _mapper.Map<Model>(model);
+
+			if (newModel.Jobs == null)
+			{
+				newModel.Jobs = new List<Job>();
+				newModel.Jobs.Add(job);
+			}
+			else
+			{
+				newModel.Jobs.Add(job);
+			}
+
+
+			if (job.Models == null)
+			{
+				job.Models = new List<Model>();
+				job.Models.Add(newModel);
+			}
+			else
+			{
+				job.Models.Add(newModel);
+			}
+
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch (DbUpdateConcurrencyException)
+			{
+				if (!JobExists((id)))
+				{
+					return NotFound();
+				}
+				else
+				{
+					throw;
+				}
+			}
+
+			return NoContent();
+		}
+
+
+
     }
 }
