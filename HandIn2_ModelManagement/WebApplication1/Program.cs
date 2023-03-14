@@ -7,6 +7,9 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddSignalR();
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddControllers();
@@ -36,6 +39,10 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+
+
 app.MapControllers();
+
+app.MapHub<StronglyTypedChathub>("/chathub");
 
 app.Run();
