@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ModelManagement.Models
 {
@@ -45,7 +46,7 @@ namespace ModelManagement.Models
         [MaxLength(1000)]
         public string? Comments { get; set; }
 
-        public List<Job>? Jobs { get; set; }
+        public List<Job> Jobs { get; set; }
 
         public List<Expense>? Expenses { get; set; }
     }

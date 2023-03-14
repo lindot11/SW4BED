@@ -209,6 +209,26 @@ namespace ModelManagement.Controllers
 		}
 
 
+		// GET: api/JobsController/model/5
+		[HttpGet("model/{modelId}")]
+		public async Task<ActionResult> GetModel(long modelId)
+		{
+			var models = await _context.Models.Include(d => d.Jobs).ToListAsync();
+			if (models == null)
+			{
+				return NotFound();
+			}
+
+			var currentModel = models.Find(x => x.ModelId == modelId);
+			if(currentModel  == null || currentModel.Jobs == null)
+			{
+				return NotFound();
+			}
+
+
+			return Ok(_mapper.Map<IEnumerable<JobDtoReturn>>(currentModel.Jobs));
+		}
+
 
 		private bool JobExists(long id)
 		{

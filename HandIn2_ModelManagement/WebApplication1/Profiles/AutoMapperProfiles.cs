@@ -18,6 +18,7 @@ namespace ModelManagement.Profiles
 			CreateMap<NewJobDto, Job>();
 			CreateMap<Job, NewJobDto>();
 			CreateMap<Job, JobDtoReturn>();
+			CreateMap<JobDtoReturn, Job > ();
 			CreateMap<Job, JobExpensesDto>();
 			CreateMap<NewExpense, Expense>();
 			CreateMap<Expense, ExpenseDto>();
