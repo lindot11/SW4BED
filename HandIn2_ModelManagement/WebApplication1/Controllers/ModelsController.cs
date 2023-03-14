@@ -28,7 +28,9 @@ namespace ModelManagement.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Model>>> GetModels()
         {
-            return await _context.Models.ToListAsync();
+	        var models = await _context.Models.ToListAsync();
+
+	        return Ok(_mapper.Map<IEnumerable<ModelDto>>(models));
         }
 
         // GET: api/Models/5
@@ -83,7 +85,6 @@ namespace ModelManagement.Controllers
         {
 	        var model = _mapper.Map<Model>(modelDto);
 
-	        //model.ModelId = modelDto.ModelId;
             _context.Models.Add(model);
 
             await _context.SaveChangesAsync();
@@ -93,7 +94,7 @@ namespace ModelManagement.Controllers
 
         // DELETE: api/Models/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteModel(long id)
+        public async Task<ActionResult> DeleteModel(long id)
         {
             var model = await _context.Models.FindAsync(id);
             if (model == null)
