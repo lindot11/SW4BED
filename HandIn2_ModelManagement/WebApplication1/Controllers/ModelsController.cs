@@ -38,20 +38,20 @@ namespace ModelManagement.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Model>> GetModel(long id)
         {
-            var model = await _context.Models.FindAsync(id);
+            var model = await _context.Models.FindAsync(id).ConfigureAwait(false);
 
             if (model == null)
             {
                 return NotFound();
             }
 
-            _context.Entry(model)
+            await _context.Entry(model)
                 .Collection(m => m.Jobs)
-                .Load();
+                .LoadAsync();
 
-			_context.Entry(model)
+			await _context.Entry(model)
 	            .Collection(m => m.Expenses)
-	            .Load();
+	            .LoadAsync();
 
 			return Ok(model);
         }
