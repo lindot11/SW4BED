@@ -47,7 +47,9 @@ namespace ModelManagement.Controllers
 
 			await _context.SaveChangesAsync();
 
-            await _hubContext.Clients.All.NewExpense(expense.amount);
+            string str = $"{expense.Date}: {expense.amount} DKK was spent on: {expense.Text}";
+
+            await _hubContext.Clients.All.NewExpense(str);
 			
             return Created(expense.ExpenseId.ToString(), expense); 
         }

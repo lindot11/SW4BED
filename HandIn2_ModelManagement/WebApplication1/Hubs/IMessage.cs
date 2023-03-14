@@ -2,6 +2,6 @@
 {
 	public interface IMessage
 	{
-		Task NewExpense(decimal expense);
+		Task NewExpense(string expense);
 	}
 }
