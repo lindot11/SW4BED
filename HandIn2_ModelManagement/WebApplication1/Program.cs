@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using ModelManagement.Data;
+using ModelManagement.Hubs;
 using System.Configuration;
 using System.Text.Json.Serialization;
 
@@ -43,6 +44,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapHub<StronglyTypedChathub>("/chathub");
+app.MapHub<StronglyTypedChatHub>("/chathub");
 
 app.Run();
