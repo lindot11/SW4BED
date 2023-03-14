@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,10 +16,12 @@ namespace ModelManagement.Controllers
     public class ModelsController : ControllerBase
     {
         private readonly ModelManagementDb _context;
+        private readonly IMapper _mapper;
 
-        public ModelsController(ModelManagementDb context)
+        public ModelsController(ModelManagementDb context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/Models
@@ -76,12 +79,16 @@ namespace ModelManagement.Controllers
         // POST: api/Models
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Model>> PostModel(Model model)
+        public async Task<ActionResult<Model>> PostModel(ModelDto modelDto)
         {
+	        var model = _mapper.Map<Model>(modelDto);
+
+	        //model.ModelId = modelDto.ModelId;
             _context.Models.Add(model);
+
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetModel", new { id = model.ModelId }, model);
+            return Created(model.ModelId.ToString(), model);
         }
 
         // DELETE: api/Models/5
