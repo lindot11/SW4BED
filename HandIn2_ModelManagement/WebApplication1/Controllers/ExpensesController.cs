@@ -5,8 +5,11 @@ using AutoMapper;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
 using ModelManagement.Data;
+using ModelManagement.Hubs;
 using ModelManagement.Models;
 using ModelManagement.Profiles;
 
@@ -18,11 +21,13 @@ namespace ModelManagement.Controllers
     {
         private readonly ModelManagementDb _context;
         private readonly IMapper _mapper;
+        private readonly IHubContext<MessageHub, IMessage> _hubContext;
 
-		public ExpensesController(ModelManagementDb context, IMapper mapper)
+		public ExpensesController(ModelManagementDb context, IMapper mapper, IHubContext<MessageHub, IMessage> hubContext)
         {
             _context = context;
             _mapper = mapper;
+            _hubContext = hubContext;
         }
 
 		
@@ -42,6 +47,7 @@ namespace ModelManagement.Controllers
 
 			await _context.SaveChangesAsync();
 
+            await _hubContext.Clients.All.NewExpense(expense.amount);
 			
             return Created(expense.ExpenseId.ToString(), expense); 
         }
