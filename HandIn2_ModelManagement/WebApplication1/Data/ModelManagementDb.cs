@@ -8,8 +8,8 @@ namespace ModelManagement.Data
         public ModelManagementDb(DbContextOptions<ModelManagementDb> options) : base(options) { }
 
         public DbSet<Model> Models => Set<Model>();
-        //public DbSet<Job> Jobs => Set<Job>();
-        //public DbSet<Expense> Expenses => Set<Expense>();
+        public DbSet<Job> Jobs => Set<Job>();
+        public DbSet<Expense> Expenses => Set<Expense>();
 
     }
 }

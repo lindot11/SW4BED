@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ModelManagement.Data;
 using ModelManagement.Models;
+using NuGet.Protocol.Core.Types;
 
 namespace ModelManagement.Controllers
 {
@@ -26,7 +27,7 @@ namespace ModelManagement.Controllers
 
         // GET: api/Models
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Model>>> GetModels()
+        public async Task<ActionResult<IEnumerable<ModelDto>>> GetModels()
         {
 	        var models = await _context.Models.ToListAsync();
 
@@ -44,7 +45,15 @@ namespace ModelManagement.Controllers
                 return NotFound();
             }
 
-            return model;
+            _context.Entry(model)
+                .Collection(m => m.Jobs)
+                .Load();
+
+			_context.Entry(model)
+	            .Collection(m => m.Expenses)
+	            .Load();
+
+			return Ok(model);
         }
 
         // PUT: api/Models/5
@@ -60,7 +69,7 @@ namespace ModelManagement.Controllers
             _context.Entry(model).State = EntityState.Modified;
 
             try
-            {
+			{
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
