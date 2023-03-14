@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,17 +16,24 @@ namespace ModelManagement.Controllers
     public class ModelsController : ControllerBase
     {
         private readonly ModelManagementDb _context;
+        private readonly IMapper _mapper;
 
-        public ModelsController(ModelManagementDb context)
+        public ModelsController(ModelManagementDb context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/Models
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Model>>> GetModels()
+        public ActionResult<IEnumerable<ModelDto>> GetModels()
         {
-            return await _context.Models.ToListAsync();
+            //return await _context.Models.ToListAsync();
+
+            var models = _context.Models.ToList();
+            var map = _mapper.Map<IEnumerable<ModelDto>>(models);
+
+            return Ok(map);
         }
 
         // GET: api/Models/5
