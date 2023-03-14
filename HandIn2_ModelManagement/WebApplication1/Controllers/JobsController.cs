@@ -50,48 +50,54 @@ namespace ModelManagement.Controllers
 
         // PUT: api/JobsController/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutJob(long id, Job job)
+        [HttpPut("{jobId}")]
+        public async Task<IActionResult> PutJob(long jobId, JobUpdateDto newJob)
         {
-            if (id != job.JobId)
-            {
-                return BadRequest();
-            }
+	        try
+	        {
+		        var job = await _context.Jobs.FindAsync(jobId).ConfigureAwait(false);
+		        if (job == null)
+		        {
+			        ModelState.AddModelError("jobId", "jobId not found");
+			        return BadRequest(ModelState);
+		        }
+		        job.Comments = newJob.Comments;
+		        job.Customer = newJob.Customer;
+		        job.Days = newJob.Days;
+		        job.Location = newJob.Location;
+		        job.StartDate = newJob.StartDate;
 
-            _context.Entry(job).State = EntityState.Modified;
+		        await _context.SaveChangesAsync();
+	        }
+	        catch (DbUpdateConcurrencyException)
+	        {
+		        if (!JobExists(jobId))
+		        {
+			        ModelState.AddModelError("jobId", "jobId not found");
+			        return BadRequest(ModelState);
+		        }
+		        else
+		        {
+			        throw;
+		        }
+	        }
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!JobExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+	        return NoContent();
         }
 
 		// POST: api/JobsController
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		[HttpPost]
-		public async Task<ActionResult<Job>> PostModel(JobDto jobdto)
+		public async Task<ActionResult<Job>> PostModel(NewJobDto jobdto)
 		{
 			var job = _mapper.Map<Job>(jobdto);
 
-			//if (job == null)
-			//{
-			//	return Problem();
-			//}
+            if (job == null)
+            {
+                return Problem();
+            }
 
-			_context.Jobs.Add(job);
+            _context.Jobs.Add(job);
 
 			await _context.SaveChangesAsync();
 
