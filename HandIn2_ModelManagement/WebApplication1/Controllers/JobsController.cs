@@ -13,18 +13,18 @@ namespace ModelManagement.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class JobsController2 : ControllerBase
+    public class JobsController : ControllerBase
     {
         private readonly ModelManagementDb _context;
         private readonly IMapper _mapper;
 
-        public JobsController2(ModelManagementDb context, IMapper mapper)
+        public JobsController(ModelManagementDb context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        // GET: api/JobsController2
+        // GET: api/JobsController
         [HttpGet]
         public async Task<ActionResult<IEnumerable<JobDto>>> GetJobs()
         {
@@ -33,7 +33,7 @@ namespace ModelManagement.Controllers
 	        return Ok(_mapper.Map<IEnumerable<JobDto>>(jobs));
 		}
 
-        // GET: api/JobsController2/5
+        // GET: api/JobsController/5
 		[HttpGet("{id}")]
         public async Task<ActionResult<Job>> GetJob(long id)
         {
@@ -47,7 +47,7 @@ namespace ModelManagement.Controllers
             return job;
         }
 
-        // PUT: api/JobsController2/5
+        // PUT: api/JobsController/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutJob(long id, Job job)
@@ -78,7 +78,7 @@ namespace ModelManagement.Controllers
             return NoContent();
         }
 
-        // POST: api/JobsController2
+        // POST: api/JobsController
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Job>> PostJob(Job job)
@@ -89,7 +89,7 @@ namespace ModelManagement.Controllers
             return CreatedAtAction("GetJob", new { id = job.JobId }, job);
         }
 
-        // DELETE: api/JobsController2/5
+        // DELETE: api/JobsController/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteJob(long id)
         {

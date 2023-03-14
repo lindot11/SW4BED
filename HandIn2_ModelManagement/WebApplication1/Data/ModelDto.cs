@@ -7,7 +7,7 @@ namespace ModelManagement.Data
 {
 	public class ModelDto
 	{
-		public long ModelId { get; set; }
+		public long ModelId { get; }
 
 		[MaxLength(64)]
 		public string? FirstName { get; set; }
