@@ -4,7 +4,10 @@ namespace ModelManagement.Data
 {
 	public class JobUpdateDto
 	{
-		public long JobId { get; set; }
+		public long JobId { get; }
+
+		[MaxLength(64)]
+		public string? Customer { get;}
 
 		public DateTime StartDate { get; set; }
 

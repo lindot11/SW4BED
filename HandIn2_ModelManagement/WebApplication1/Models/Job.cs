@@ -4,7 +4,7 @@ namespace ModelManagement.Models
 {
     public class Job
     {
-        public long JobId { get; set; }
+        public long JobId { get; }
 
         [MaxLength(64)]
         public string? Customer { get; set; }

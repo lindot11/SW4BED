@@ -5,10 +5,10 @@ namespace ModelManagement.Data
 {
 	public class JobDto
 	{
-		public long JobId { get; set; }
+		public long JobId { get; }
 
 		[MaxLength(64)]
-		public string? Customer { get;}
+		public string? Customer { get; set; }
 
 		public DateTime StartDate { get; set; }
 
@@ -19,7 +19,5 @@ namespace ModelManagement.Data
 
 		[MaxLength(2000)]
 		public string? Comments { get; set; }
-
-		public List<Model>? Models { get; set; }
 	}
 }

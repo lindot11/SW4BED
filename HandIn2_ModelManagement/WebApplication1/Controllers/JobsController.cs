@@ -79,34 +79,42 @@ namespace ModelManagement.Controllers
             return NoContent();
         }
 
-        // POST: api/JobsController
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Job>> PostJob(Job job)
-        {
-            _context.Jobs.Add(job);
-            await _context.SaveChangesAsync();
+		// POST: api/JobsController
+		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		[HttpPost]
+		public async Task<ActionResult<Job>> PostModel(JobDto jobdto)
+		{
+			var job = _mapper.Map<Job>(jobdto);
 
-            return CreatedAtAction("GetJob", new { id = job.JobId }, job);
-        }
+			//if (job == null)
+			//{
+			//	return Problem();
+			//}
 
-        // DELETE: api/JobsController/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteJob(long id)
-        {
-            var job = await _context.Jobs.FindAsync(id);
-            if (job == null)
-            {
-                return NotFound();
-            }
+			_context.Jobs.Add(job);
 
-            _context.Jobs.Remove(job);
-            await _context.SaveChangesAsync();
+			await _context.SaveChangesAsync();
 
-            return NoContent();
-        }
+			return Created(job.JobId.ToString(), job);
+		}
 
-        private bool JobExists(long id)
+		// DELETE: api/JobsController/5
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> DeleteJob(long id)
+		{
+			var job = await _context.Jobs.FindAsync(id);
+			if (job == null)
+			{
+				return NotFound();
+			}
+
+			_context.Jobs.Remove(job);
+			await _context.SaveChangesAsync();
+
+			return NoContent();
+		}
+
+		private bool JobExists(long id)
         {
             return _context.Jobs.Any(e => e.JobId == id);
         }
