@@ -14,7 +14,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 // Adding automapper
-builder.Services.AddAutoMapper(typeof(Program));
+//builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddDbContext<ModelManagementDb>(opt => opt.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnection")));
