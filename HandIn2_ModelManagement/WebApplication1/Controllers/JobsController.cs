@@ -172,8 +172,8 @@ namespace ModelManagement.Controllers
 
 
 		// DELETE: api/JobsController/model/5
-		[HttpDelete("model/{id}")]
-		public async Task<ActionResult> DeleteModel(long id)
+		[HttpDelete("model/{jobId}/{modelId}")]
+		public async Task<ActionResult> DeleteModel(long jobId, long modelId)
 		{
 			var job = await _context.Jobs.Include(d => d.Models).ToListAsync();
 			if (job == null)
@@ -181,13 +181,13 @@ namespace ModelManagement.Controllers
 				return NotFound();
 			}
 
-			var currentjob =job.Find(x => x.JobId == id);
+			var currentjob =job.Find(x => x.JobId == jobId);
 			if (currentjob == null || currentjob.Models == null)
 			{
 				return NotFound();
 			}
 
-			currentjob.Models.RemoveAll(x => x.ModelId == 5);
+			currentjob.Models.RemoveAll(x => x.ModelId == modelId);
 
 			try
 			{
@@ -195,7 +195,7 @@ namespace ModelManagement.Controllers
 			}
 			catch (DbUpdateConcurrencyException)
 			{
-				if (!JobExists((id)))
+				if (!JobExists((jobId)))
 				{
 					return NotFound();
 				}
