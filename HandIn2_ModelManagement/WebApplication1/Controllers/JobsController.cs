@@ -37,7 +37,7 @@ namespace ModelManagement.Controllers
 
         // GET: api/JobsController/5
 		// Gets job with all expenses
-		[HttpGet("{jobId}/Expenses")]
+		[HttpGet("expenses/{jobId}")]
         public async Task<ActionResult<JobExpensesDto>> GetJob(long jobId)
         {
             var job = await _context.Jobs.FindAsync(jobId);
@@ -59,7 +59,7 @@ namespace ModelManagement.Controllers
 
         // PUT: api/JobsController/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{jobId}")]
+        [HttpPut("updatejob/{jobId}")]
         public async Task<IActionResult> PutJob(long jobId, JobUpdateDto updateJob)
         {
 	        var job = await _context.Jobs.FindAsync(jobId);
@@ -94,7 +94,7 @@ namespace ModelManagement.Controllers
 
         // POST: api/JobsController
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-		[HttpPost]
+		[HttpPost("newjob")]
 		public async Task<ActionResult<Job>> PostJob(NewJobDto jobdto)
 		{
 			var job = _mapper.Map<Job>(jobdto);
@@ -115,10 +115,10 @@ namespace ModelManagement.Controllers
 		}
 
 		// DELETE: api/JobsController/5
-		[HttpDelete("{id}")]
-		public async Task<IActionResult> DeleteJob(long id)
+		[HttpDelete("{jobId}")]
+		public async Task<IActionResult> DeleteJob(long jobId)
 		{
-			var job = await _context.Jobs.FindAsync(id);
+			var job = await _context.Jobs.FindAsync(jobId);
 			if (job == null)
 			{
 				return NotFound();
@@ -133,19 +133,18 @@ namespace ModelManagement.Controllers
 		
 
 		// PUT: api/jobController/model/5
-		[HttpPut("model/{id}")]
-		public async Task<ActionResult<NewModelForJobDto>> PutModel(long id, NewModelForJobDto model)
+		// Adds a model to a job
+		[HttpPut("addModelToJob/{jobId}/{modelId}")]
+		public async Task<ActionResult<NewModelForJobDto>> PutModel(long jobId, long modelId)
 		{
 
-			var job = await _context.Jobs.FindAsync(id);
-			if (job == null)
+			var job = await _context.Jobs.FindAsync(jobId);
+			var newModel = await _context.Models.FindAsync(modelId);
+			if (job == null || newModel == null)
 			{
-				return Problem();
+				return NotFound();
 			}
 
-			var newModel = _mapper.Map<Model>(model);
-
-			
 			newModel.Jobs = new List<Job> { job };
 			job.Models = new List<Model> { newModel };
 
@@ -156,7 +155,7 @@ namespace ModelManagement.Controllers
 			}
 			catch (DbUpdateConcurrencyException)
 			{
-				if (!JobExists((id)))
+				if (!JobExists((jobId)))
 				{
 					return NotFound();
 				}
@@ -172,7 +171,8 @@ namespace ModelManagement.Controllers
 
 
 		// DELETE: api/JobsController/model/5
-		[HttpDelete("model/{jobId}/{modelId}")]
+		// Removes model from job
+		[HttpDelete("removeModelFromJob/{jobId}/{modelId}")]
 		public async Task<ActionResult> DeleteModel(long jobId, long modelId)
 		{
 			var job = await _context.Jobs.Include(d => d.Models).ToListAsync();
@@ -210,6 +210,7 @@ namespace ModelManagement.Controllers
 
 
 		// GET: api/JobsController/model/5
+		// Gets all jobs for a given modelID
 		[HttpGet("model/{modelId}")]
 		public async Task<ActionResult> GetModel(long modelId)
 		{

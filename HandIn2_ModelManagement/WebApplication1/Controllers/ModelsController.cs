@@ -58,7 +58,8 @@ namespace ModelManagement.Controllers
 
         // PUT: api/Models/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        // Update model info
+        [HttpPut("updatemodel/{id}")]
 		public async Task<IActionResult> PutModel(long id, NewModelForJobDto newModelDto)
 		{
 			var modelToUpdate = await _context.Models.FindAsync(id);
