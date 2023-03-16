@@ -4,8 +4,8 @@ namespace ModelManagement.Data
 {
 	public class ModelName
 	{
-		public long ModelId { get; }
-
+		public long ModelId { get; set; }
+		 
 		[MaxLength(64)]
 		public string? FirstName { get; set; }
 

@@ -30,7 +30,7 @@ namespace ModelManagement.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<JobDto>>> GetJobs()
         {
-	        var jobs = await _context.Jobs.ToListAsync();
+	        var jobs = await _context.Jobs.Include(j => j.Models).ToListAsync();
 
 	        return Ok(_mapper.Map<IEnumerable<JobDto>>(jobs));
 		}

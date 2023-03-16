@@ -26,7 +26,7 @@ namespace ModelManagement.Controllers
         }
 
         // GET: api/Models
-        [HttpGet("/all")]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<ModelDto>>> GetModels()
         {
 	        var models = await _context.Models.ToListAsync();
@@ -59,38 +59,44 @@ namespace ModelManagement.Controllers
         // PUT: api/Models/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutModel(long id, Model model)
-        {
-            if (id != model.ModelId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(model).State = EntityState.Modified;
-
-            try
+		public async Task<IActionResult> PutModel(long id, NewModelForJobDto newModelDto)
+		{
+			var modelToUpdate = await _context.Models.FindAsync(id);
 			{
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ModelExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+				if (modelToUpdate == null)
+				{
+					return NotFound();
+				}
 
-            return NoContent();
-        }
+				_mapper.Map(newModelDto, modelToUpdate);
 
-        // POST: api/Models
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Model>> PostModel(ModelDto modelDto)
+				_context.Entry(modelToUpdate).State = EntityState.Modified;
+
+				try
+				{
+					await _context.SaveChangesAsync();
+				}
+				catch (DbUpdateConcurrencyException)
+				{
+					if (!ModelExists(id))
+					{
+						return NotFound();
+					}
+					else
+					{
+						throw;
+					}
+				}
+
+				return NoContent();
+			}
+
+		}
+
+		// POST: api/Models
+		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		[HttpPost]
+        public async Task<ActionResult<Model>> PostModel(NewModelForJobDto modelDto)
         {
 	        var model = _mapper.Map<Model>(modelDto);
 
@@ -98,7 +104,9 @@ namespace ModelManagement.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Created(model.ModelId.ToString(), model);
+            var modelreturn = _mapper.Map<NewModelForJobDto>(model);
+
+            return Created(model.ModelId.ToString(), modelreturn);
         }
 
         // DELETE: api/Models/5
