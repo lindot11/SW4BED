@@ -32,14 +32,16 @@ namespace SW4BED_3.Pages
 		        await this.resturantRepository.ReservationCheckIn(_serviceProvider, RoomNumber, NrAdults, NrChildren);
 		        
 		        @ViewData["ServerResponse"] = $"SUCCESS";
-
+ 
 			}
 			catch (Exception e)
 	        {
 		        @ViewData["ServerResponse"] = $"{e.Message.ToString()}";
 	        }
 
+
 			return Page();
+
 
 		}
     }
