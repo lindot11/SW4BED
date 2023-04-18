@@ -33,10 +33,19 @@ namespace SW4BED_3.Pages
 
         public void OnPost()
         {
+	        try
+	        {
+		        resturantRepository.ReservationCheckIn(_serviceProvider, RoomNumber, NrAdults, NrChildren);
 
-	        resturantRepository.ReservationCheckIn(_serviceProvider, RoomNumber, NrAdults, NrChildren);
+		        @ViewData["ServerResponse"] = $"Success";
+			}
+			catch (Exception e)
+	        {
+		        @ViewData["ServerResponse"] = $"{e.Message.ToString()}";
+		       //@ViewData["ServerResponse"] = $"bad";
+			}
 
-		}
+        }
     }
 }
  
