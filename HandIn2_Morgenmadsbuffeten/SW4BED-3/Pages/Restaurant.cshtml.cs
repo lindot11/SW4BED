@@ -31,7 +31,7 @@ namespace SW4BED_3.Pages
 	        {
 		        await this.resturantRepository.ReservationCheckIn(_serviceProvider, RoomNumber, NrAdults, NrChildren);
 		        
-		        @ViewData["ServerResponse"] = $"Success";
+		        @ViewData["ServerResponse"] = $"SUCCESS";
 
 		        
 			}
@@ -41,7 +41,6 @@ namespace SW4BED_3.Pages
 	        }
 
 	        return Page();
-
 		}
     }
 }
