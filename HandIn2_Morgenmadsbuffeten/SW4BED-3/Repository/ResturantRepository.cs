@@ -6,9 +6,9 @@ namespace SW4BED_3.Services
 {
 	public class ResturantRepository
 	{
-		public void ReservationCheckIn(IServiceProvider serviceProvider, int roomNumber, int adults, int kids)
+		public async Task ReservationCheckIn(IServiceProvider serviceProvider, int roomNumber, int adults, int kids)
 		{
-			using (var context = new DataDB(serviceProvider.GetRequiredService<DbContextOptions<DataDB>>()))
+			await using (var context = new DataDB(serviceProvider.GetRequiredService<DbContextOptions<DataDB>>()))
 			{
 				if (context == null || context.Rooms == null)
 				{
@@ -35,9 +35,8 @@ namespace SW4BED_3.Services
 					throw new Exception(message);
 				}
 
-				
-
 				context.Reservations.Update(entity);
+
 				context.SaveChanges();
 
 			}
