@@ -1,0 +1,28 @@
+﻿@page
+@model SW4BED_3.Pages.HotelModel
+@{
+}
+
+<div class="text-center">
+	<h1 class="display-4">Welcome to the Hotel</h1>
+	<div>
+
+		<form method = "Post">
+			<label for="DateTime">Date:</label>
+			<input type="date" id="DateTime" name="DateTime" asp-for="DateTime">
+			<input type="submit">
+		</form>
+
+		<table>
+			<tr>
+				<th type = "date" > @ViewData["Date"] </th>
+				<th> @ViewData["Adults"] </th>
+				<th> @ViewData["Adults"] </th>
+			</tr>
+		</table>
+		
+
+	</div>
+	
+
+</div>
