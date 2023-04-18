@@ -5,6 +5,9 @@ using SW4BED_3.Data;
 using SW4BED_3.Seed;
 using SW4BED_3.SeedUser;
 
+// TODO: Indsæt seed data fra gpt
+
+
 namespace SW4BED_3
 {
     public class Program
