@@ -33,14 +33,14 @@ namespace SW4BED_3.Pages
 		        
 		        @ViewData["ServerResponse"] = $"SUCCESS";
 
+		        
 			}
 			catch (Exception e)
 	        {
 		        @ViewData["ServerResponse"] = $"{e.Message.ToString()}";
 	        }
 
-			return Page();
-
+	        return Page();
 		}
     }
 }
