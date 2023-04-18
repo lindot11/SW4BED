@@ -25,17 +25,22 @@ namespace SW4BED_3.Pages
 
 
 
-
-        public void OnGet()
+        public async Task<IActionResult> OnPost()
         {
-        }
+	        try
+	        {
+		        await this.resturantRepository.ReservationCheckIn(_serviceProvider, RoomNumber, NrAdults, NrChildren);
+		        
+		        @ViewData["ServerResponse"] = $"SUCCESS";
 
+		        
+			}
+			catch (Exception e)
+	        {
+		        @ViewData["ServerResponse"] = $"{e.Message.ToString()}";
+	        }
 
-        public void OnPost()
-        {
-
-	        resturantRepository.ReservationCheckIn(_serviceProvider, RoomNumber, NrAdults, NrChildren);
-
+	        return Page();
 		}
     }
 }
