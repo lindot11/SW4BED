@@ -6,7 +6,7 @@ namespace SW4BED_3.Services
 {
 	public class ResturantRepository
 	{
-		public static void ReservationCheckIn(IServiceProvider serviceProvider, int roomNumber, int adults, int kids)
+		public void ReservationCheckIn(IServiceProvider serviceProvider, int roomNumber, int adults, int kids)
 		{
 			using (var context = new DataDB(serviceProvider.GetRequiredService<DbContextOptions<DataDB>>()))
 			{
@@ -29,7 +29,7 @@ namespace SW4BED_3.Services
 				if (entity.AdultsCheckIn > entity.AdultsReservations
 				    && entity.KidsCheckIn > entity.KidsReservations)
 				{
-					throw new ArgumentOutOfRangeException("Range of checkins out of rang");
+					throw new ArgumentOutOfRangeException("Range of checkins out of range");
 				}
 
 				

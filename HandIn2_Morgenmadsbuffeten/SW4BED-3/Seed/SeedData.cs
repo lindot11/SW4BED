@@ -51,10 +51,10 @@ namespace SW4BED_3.Seed
 
 				context.Reservations.AddRange(
 					new Reservations { RoomNumber = 1, AdultsReservations = 2, KidsReservations = 2, AdultsCheckIn = 2, KidsCheckIn = 2, Date = new DateTime(2023, 4, 17) },
-					new Reservations { RoomNumber = 2, AdultsReservations = 2, KidsReservations = 2, AdultsCheckIn = 2, KidsCheckIn = 2, Date = new DateTime(2023, 4, 17) },
-					new Reservations { RoomNumber = 3, AdultsReservations = 2, KidsReservations = 2, AdultsCheckIn = 2, KidsCheckIn = 2, Date = new DateTime(2023, 4, 17) },
-					new Reservations { RoomNumber = 4, AdultsReservations = 2, KidsReservations = 2, AdultsCheckIn = 2, KidsCheckIn = 2, Date = new DateTime(2023, 4, 17) },
-					new Reservations { RoomNumber = 5, AdultsReservations = 2, KidsReservations = 2, AdultsCheckIn = 2, KidsCheckIn = 2, Date = new DateTime(2023, 4, 17) });
+					new Reservations { RoomNumber = 2, AdultsReservations = 2, KidsReservations = 2, AdultsCheckIn = 0, KidsCheckIn = 0, Date = new DateTime(2023, 4, 17) },
+					new Reservations { RoomNumber = 3, AdultsReservations = 2, KidsReservations = 2, AdultsCheckIn = 0, KidsCheckIn = 0, Date = new DateTime(2023, 4, 17) },
+					new Reservations { RoomNumber = 4, AdultsReservations = 2, KidsReservations = 2, AdultsCheckIn = 0, KidsCheckIn = 0, Date = new DateTime(2023, 4, 17) },
+					new Reservations { RoomNumber = 5, AdultsReservations = 2, KidsReservations = 2, AdultsCheckIn = 0, KidsCheckIn = 0, Date = new DateTime(2023, 4, 17) });
 
 				context.SaveChanges();
 

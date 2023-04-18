@@ -10,19 +10,33 @@ namespace SW4BED_3.Pages
     [BindProperties]
     public class RestaurantModel : PageModel
     {
-	    private ResturantRepository Rr = new ResturantRepository();
+        private ResturantRepository resturantRepository = new ResturantRepository();
+        private readonly IServiceProvider  _serviceProvider;
 
         public int RoomNumber { get; set; }
         public int NrAdults { get; set; }
         public int NrChildren { get; set; }
+
+
+        public RestaurantModel(IServiceProvider serviceProvider)
+        {
+	        _serviceProvider = serviceProvider;
+        }
+
+
+
+
         public void OnGet()
         {
         }
 
-        public async Task<IActionResult>  OnUpdateAsync()
+
+        public void OnPost()
         {
 
-	     
-        }
+	        resturantRepository.ReservationCheckIn(_serviceProvider, RoomNumber, NrAdults, NrChildren);
+
+		}
     }
 }
+ 
