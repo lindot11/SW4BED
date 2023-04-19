@@ -15,12 +15,12 @@ namespace SW4BED_3.Services
 					throw new Exception("NoDataBase");
 				}
 
-				var entity = context.Reservations.FirstOrDefault(c => c.RoomNumber == roomNumber);
+				var entity = context.Reservations.FirstOrDefault(c => c.RoomNumber == roomNumber && c.Date == DateTime.Today);
 
 
 				if (entity == null)
 				{
-					throw new Exception("NullRoomNumber");
+					throw new Exception("RoomNumber do not exist or there is no reservation Today");
 				}
 
 				entity.AdultsCheckIn += adults;
