@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SW4BED_3.Data;
+using SW4BED_3.Models;
 
 namespace SW4BED_3.Pages
 {

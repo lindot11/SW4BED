@@ -1,44 +1,74 @@
 ﻿@page
 @model SW4BED_3.Pages.HotelModel
 @{
+	ViewData["Title"] = "Hotel";
 }
 
 <div class="text-center">
 	<h1 class="display-4">Welcome to the Hotel</h1>
-	<div>
-
-		<form method = "Post">
-			<label for="DateTime">Date:</label>
-			<input type="date" id="DateTime" name="DateTime" asp-for="DateTime">
-			<div>
-				<label for="RoomNumber">Room number:</label>
-				<input type="text" id="RoomNumber" name="RoomNumber" asp-for="Reservation.RoomNumber">
+	<form method="post" asp-page-handler="OnPostUpdateReservation">
+		<div>
+			<div class="col-sm-2">
+				<label asp-for="SelectedDate">Select date:</label>
+				<input asp-for="SelectedDate" class="form-control" type="date" />
 			</div>
-			<div>
-				<label for="Adults">Adults:</label>
-				<input type="text" id="Adults" name="Adults" asp-for="Reservation.AdultsReservations"/>
+			<div class="col-sm-2">
+				<button type="submit" class="btn btn-primary">Search</button>
 			</div>
-			<div>
-				<label for="Children">Children:</label>
-				<input type="text" id="Children" name="Children" asp-for="Reservation.KidsReservations" />
-			</div>		
-			<input type="submit">
-		</form>
-
-		@if (ViewData["Date"] != null && ViewData["RoomNumber"] != null && ViewData["Adults"] != null && ViewData["Children"] != null)
-		{
-			<table>
+		</div>
+		<table class="table">
+			<thead>
+			<tr>
+				<th>Room Number</th>
+				<th>Adults Reservations</th>
+				<th>Kids Reservations</th>
+				<th>Adults Check-In</th>
+				<th>Kids Check-In</th>
+				<th>Actions</th>
+			</tr>
+			</thead>
+			<tbody>
+			@foreach (var roomReservation in Model.RoomReservations)
+			{
 				<tr>
-					<th>@ViewData["Date"]</th>
-					<th>@ViewData["RoomNumber"]</th>
-					<th>@ViewData["Adults"]</th>
-					<th>@ViewData["Children"]</th>
+					<td>@roomReservation.RoomNumber</td>
+					<td>
+						<input type="number" asp-for="@roomReservation.AdultsReservations" />
+					</td>
+					<td>
+						<input type="number" asp-for="@roomReservation.KidsReservations" />
+					</td>
+					<td>
+						<input type="number" asp-for="@roomReservation.AdultsCheckIn" />
+					</td>
+					<td>
+						<input type="number" asp-for="@roomReservation.KidsCheckIn" />
+					</td>
+					
+					<td>
+						<button type="submit" class="btn btn-primary"
+						        asp-page-handler="OnPostUpdateReservation"
+						        asp-route-reservationId="@roomReservation.ReservationId"
+						        asp-route-adultsReservations="@roomReservation.AdultsReservations"
+						        asp-route-kidsReservations="@roomReservation.KidsReservations"
+						        asp-route-adultsCheckIn="@roomReservation.AdultsCheckIn"
+						        asp-route-kidsCheckIn="@roomReservation.KidsCheckIn">
+							Update
+						</button>
+					</td>
+
 				</tr>
-			</table>
-		}
-		
-
-	</div>
+			}
+			<tr>
+				<td>Total</td>
+				<td>@Model.TotalAdultReservations</td>
+				<td>@Model.TotalKidsReservations</td>
+				<td>@Model.TotalAdultsCheckIn</td>
+				<td>@Model.TotalKidsCheckIn</td>
+				<td></td>
+			</tr>
+			</tbody>
+		</table>
+	</form>
 	
-
 </div>
