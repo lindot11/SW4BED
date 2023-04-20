@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SW4BED_3.Data;
+using SW4BED_3.Hubs;
 using SW4BED_3.Seed;
 using SW4BED_3.SeedUser;
 using SW4BED_3.Services;
@@ -44,6 +45,7 @@ namespace SW4BED_3
                 
             });
 
+            builder.Services.AddSignalR();
 
             builder.Services.AddRazorPages();
 
@@ -77,6 +79,7 @@ namespace SW4BED_3
             app.UseAuthorization();
 
             app.MapRazorPages();
+            app.MapHub<ChatHub>("/chatHub");
 
             using (var scope = app.Services.CreateScope())
             {
