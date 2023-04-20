@@ -23,7 +23,6 @@ namespace SW4BED_3.Pages
 
             // Retrieve the data for the given date
             var reservations = await _context.Reservations
-                .Include(r => r.Rooms)
                 .Where(r => r.Date == date)
                 .ToListAsync();
 

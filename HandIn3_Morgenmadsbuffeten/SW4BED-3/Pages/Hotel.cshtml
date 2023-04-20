@@ -33,7 +33,16 @@
 			        <button class="btn btn-primary" type="submit">Add Reservation</button>
 		        </div>
 	        </form>
-
+            
+	        <div class="text-left">Status: @ViewData["ServerResponse"]</div>
+	        
+	            <div class="text-left mt-3">
+		            <h3>Details:</h3>
+		            <p>@ViewData["ResponseDate"]</p>
+		            <p>@ViewData["ResponseRoom"]</p>
+		            <p>@ViewData["ResponseAdults"]</p>
+		            <p>@ViewData["ResponseKids"]</p>
+	            </div>
 
         </div>
         <div class="col-md-6">

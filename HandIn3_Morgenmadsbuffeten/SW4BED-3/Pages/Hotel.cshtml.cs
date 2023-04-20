@@ -52,6 +52,11 @@ namespace SW4BED_3.Pages
             try
             {
                 await _hotelRepository.AddOrUpdateBreakfastReservation(_serviceProvider, SelectedDate, RoomNumber, AdultsReservations, KidsReservations);
+                ViewData["ServerResponse"] = "Reservation saved or updated successfully.";
+                ViewData["ResponseRoom"] += $"RoomNumber: {RoomNumber}";
+                ViewData["ResponseAdults"] += $"Nr of adults: {AdultsReservations}";
+                ViewData["ResponseKids"] += $"Nr of kids: {KidsReservations}";
+                ViewData["ResponseDate"] += $"Reservation date: {SelectedDate.ToShortDateString()}";
 
                 await _chatHubContext.Clients.All.SendAsync("Update");
             }
