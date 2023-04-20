@@ -1,104 +1,75 @@
-﻿@*@page
+﻿@page
 @model SW4BED_3.Pages.HotelModel
 @{
 }
 
-<div class="text-center">
-	<h1 class="display-4">Welcome to the Hotel</h1>
-
-	<div>
-		<form method="post">
-			<label for="SelectedDate">Date:</label>
-			<input type="date" asp-for="SelectedDate" required><br>
-			<label for="RoomNumber">RoomNumber:</label>
-			<input type="number" asp-for="RoomNumber" required><br>
-			<label for="AdultsReservations">Adults Reservations:</label>
-			<input type="number" asp-for="AdultsReservations" required><br>
-			<label for="KidsReservations">Kids Reservations:</label>
-			<input type="number" asp-for="KidsReservations" required><br>
-			<input type="submit">
-		</form>
-	</div>
-	<div>Status: @ViewData["ServerResponse"]
-	</div>
-
-	<h2>Checked-in Rooms for Breakfast</h2>
-	<table>
-		<thead>
-		<tr>
-			<th>Room Number</th>
-			<th>Adults Checked In</th>
-			<th>Kids Checked In</th>
-		</tr>
-		</thead>
-		<tbody>
-		@foreach (var room in Model.CheckedInRooms)
-		{
-			<tr>
-				<td>@room.RoomNumber</td>
-				<td>@room.AdultsCheckIn</td>
-				<td>@room.KidsCheckIn</td>
-			</tr>
-		}
-		</tbody>
-	</table>
-</div>*@
-
-@page
-@model SW4BED_3.Pages.HotelModel
-@{
-}
-
-<div class="text-center">
-	<h1 class="display-4">Welcome to the Hotel</h1>
-	<div>
-		<h2>Add Reservation</h2>
-		<form method="post">
-			<label for="RoomNumber">RoomNumber:</label>
-			<input type="number" asp-for="RoomNumber"><br>
-			<label for="NrAdults">Adults:</label>
-			<input type="number" asp-for="AdultsReservations"><br>
-			<label for="NrChildren">Children:</label>
-			<input type="number" asp-for="KidsReservations"><br>
-			<label for="ReservationDate">Reservation Date:</label>
-			<input type="date" asp-for="SelectedDate"><br>
-			<input type="submit" value="Add Reservation">
-		</form>
-		<div>Status: @ViewData["ServerResponse"]</div>
-	</div>
-	<hr />
-	<div>
-		<h2>List of Rooms Checked In for Breakfast</h2>
-		<form method="post">
-			<label for="BreakfastDate">Date:</label>
-			<input type="date" asp-for="SelectedDate"><br>
-			<input type="submit" value="Update List">
-		</form>
-		<table class="table">
-			<thead>
-				<tr>
-					<th>Room Number</th>
-					<th>Adults Checkin</th>
-					<th>Kids Checkin</th>
-				</tr>
-			</thead>
-			<tbody>
-				@foreach (var room in Model.CheckedInRooms)
-				{
-					<tr>
-						<td>@room.RoomNumber</td>
-						<td>@room.AdultsCheckIn</td>
-						<td>@room.KidsCheckIn</td>
-					</tr>
-				}
-				<tr>
-					<td>Total:</td>
-					<td>@Model.TotalAdults</td>
-					<td>@Model.TotalKids</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-center display-4">Breakfast booking</h1>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <h2>Add Breakfast Reservation</h2>
+            <form method="post">
+                <div class="form-group">
+                    <label for="RoomNumber">Room Number:</label>
+                    <input class="form-control" type="number" asp-for="RoomNumber">
+                </div>
+                <div class="form-group">
+                    <label for="NrAdults">Adults:</label>
+                    <input class="form-control" type="number" asp-for="AdultsReservations">
+                </div>
+                <div class="form-group">
+                    <label for="NrChildren">Children:</label>
+                    <input class="form-control" type="number" asp-for="KidsReservations">
+                </div>
+                <div class="form-group">
+                    <label for="ReservationDate">Reservation Date:</label>
+                    <input class="form-control" type="date" asp-for="SelectedDate">
+                </div>
+                <div class="form-group text-center">
+                    <button class="btn btn-primary" type="submit">Add Reservation</button>
+                </div>
+            </form>
+            <div class="text-center">Status: @ViewData["ServerResponse"]</div>
+        </div>
+        <div class="col-md-6">
+            <h2>This many fat fucks gobbled through the buffet on date: </h2>
+            <form method="post">
+                <div class="form-group">
+                    <label for="BreakfastDate">Date:</label>
+                    <input class="form-control" type="date" asp-for="SelectedDate">
+                </div>
+                <div class="form-group text-center">
+                    <button class="btn btn-primary" type="submit">Update List</button>
+                </div>
+            </form>
+            <table class="table table-striped table-hover mt-3">
+                <thead>
+                    <tr>
+                        <th>Room Number</th>
+                        <th>Adults Checked In</th>
+                        <th>Kids Checked In</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var room in Model.CheckedInRooms)
+                    {
+                        <tr>
+                            <td>@room.RoomNumber</td>
+                            <td>@room.AdultsCheckIn</td>
+                            <td>@room.KidsCheckIn</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td><strong>Total:</strong></td>
+                        <td><strong>@Model.TotalAdults</strong></td>
+                        <td><strong>@Model.TotalKids</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
-
-

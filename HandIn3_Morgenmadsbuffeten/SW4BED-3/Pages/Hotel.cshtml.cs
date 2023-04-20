@@ -48,7 +48,11 @@ namespace SW4BED_3.Pages
             try
             {
                 await _hotelRepository.AddOrUpdateBreakfastReservation(_serviceProvider, SelectedDate, RoomNumber, AdultsReservations, KidsReservations);
-                ViewData["ServerResponse"] = "Reservation saved or updated successfully.";
+                ViewData["ServerResponse"] = "Reservation saved or updated successfully.\n\n";
+                ViewData["ServerResponse"] += $"RoomNumber: {RoomNumber}\n";
+                ViewData["ServerResponse"] += $"Nr of adults: {AdultsReservations}\n";
+                ViewData["ServerResponse"] += $"Nr of kids: {KidsReservations}\n";
+                ViewData["ServerResponse"] += $"Reservation date: {SelectedDate.ToShortDateString()}\n";
             }
             catch (Exception e)
             {
