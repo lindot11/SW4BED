@@ -12,28 +12,39 @@
     <div class="row mt-4">
         <div class="col-md-6">
             <h2>Add Breakfast Reservation</h2>
-            <form method="post">
-                <div class="form-group">
-                    <label for="RoomNumber">Room Number:</label>
-                    <input class="form-control" type="number" asp-for="RoomNumber">
-                </div>
-                <div class="form-group">
-                    <label for="NrAdults">Adults:</label>
-                    <input class="form-control" type="number" asp-for="AdultsReservations">
-                </div>
-                <div class="form-group">
-                    <label for="NrChildren">Children:</label>
-                    <input class="form-control" type="number" asp-for="KidsReservations">
-                </div>
-                <div class="form-group">
-                    <label for="ReservationDate">Reservation Date:</label>
-                    <input class="form-control" type="date" asp-for="SelectedDate">
-                </div>
-                <div class="form-group text-center">
-                    <button class="btn btn-primary" type="submit">Add Reservation</button>
-                </div>
-            </form>
-            <div class="text-center">Status: @ViewData["ServerResponse"]</div>
+	        <form method="post">
+		        <div class="form-group">
+			        <label for="RoomNumber">Room Number:</label>
+			        <input class="form-control" type="number" asp-for="RoomNumber">
+		        </div>
+		        <div class="form-group">
+			        <label for="NrAdults">Adults:</label>
+			        <input class="form-control" type="number" asp-for="AdultsReservations">
+		        </div>
+		        <div class="form-group">
+			        <label for="NrChildren">Children:</label>
+			        <input class="form-control" type="number" asp-for="KidsReservations">
+		        </div>
+		        <div class="form-group">
+			        <label for="ReservationDate">Reservation Date:</label>
+			        <input class="form-control" type="date" asp-for="SelectedDate">
+		        </div>
+		        <div class="form-group text-center">
+			        <button class="btn btn-primary" type="submit">Add Reservation</button>
+		        </div>
+	        </form>
+            
+	        <div class="text-left">Status: @ViewData["ServerResponse"]</div>
+	        
+	            <div class="text-left mt-3">
+		            <h3>Details:</h3>
+		            <p>@ViewData["ResponseDate"]</p>
+		            <p>@ViewData["ResponseRoom"]</p>
+		            <p>@ViewData["ResponseAdults"]</p>
+		            <p>@ViewData["ResponseKids"]</p>
+	            </div>
+            
+
         </div>
         <div class="col-md-6">
             <h2>This many fat fucks gobbled through the buffet on date: </h2>
