@@ -1,74 +1,104 @@
-﻿@page
+﻿@*@page
 @model SW4BED_3.Pages.HotelModel
 @{
-	ViewData["Title"] = "Hotel";
 }
 
 <div class="text-center">
 	<h1 class="display-4">Welcome to the Hotel</h1>
-	<form method="post" asp-page-handler="OnPostUpdateReservation">
-		<div>
-			<div class="col-sm-2">
-				<label asp-for="SelectedDate">Select date:</label>
-				<input asp-for="SelectedDate" class="form-control" type="date" />
-			</div>
-			<div class="col-sm-2">
-				<button type="submit" class="btn btn-primary">Search</button>
-			</div>
-		</div>
+
+	<div>
+		<form method="post">
+			<label for="SelectedDate">Date:</label>
+			<input type="date" asp-for="SelectedDate" required><br>
+			<label for="RoomNumber">RoomNumber:</label>
+			<input type="number" asp-for="RoomNumber" required><br>
+			<label for="AdultsReservations">Adults Reservations:</label>
+			<input type="number" asp-for="AdultsReservations" required><br>
+			<label for="KidsReservations">Kids Reservations:</label>
+			<input type="number" asp-for="KidsReservations" required><br>
+			<input type="submit">
+		</form>
+	</div>
+	<div>Status: @ViewData["ServerResponse"]
+	</div>
+
+	<h2>Checked-in Rooms for Breakfast</h2>
+	<table>
+		<thead>
+		<tr>
+			<th>Room Number</th>
+			<th>Adults Checked In</th>
+			<th>Kids Checked In</th>
+		</tr>
+		</thead>
+		<tbody>
+		@foreach (var room in Model.CheckedInRooms)
+		{
+			<tr>
+				<td>@room.RoomNumber</td>
+				<td>@room.AdultsCheckIn</td>
+				<td>@room.KidsCheckIn</td>
+			</tr>
+		}
+		</tbody>
+	</table>
+</div>*@
+
+@page
+@model SW4BED_3.Pages.HotelModel
+@{
+}
+
+<div class="text-center">
+	<h1 class="display-4">Welcome to the Hotel</h1>
+	<div>
+		<h2>Add Reservation</h2>
+		<form method="post">
+			<label for="RoomNumber">RoomNumber:</label>
+			<input type="number" asp-for="RoomNumber"><br>
+			<label for="NrAdults">Adults:</label>
+			<input type="number" asp-for="AdultsReservations"><br>
+			<label for="NrChildren">Children:</label>
+			<input type="number" asp-for="KidsReservations"><br>
+			<label for="ReservationDate">Reservation Date:</label>
+			<input type="date" asp-for="SelectedDate"><br>
+			<input type="submit" value="Add Reservation">
+		</form>
+		<div>Status: @ViewData["ServerResponse"]</div>
+	</div>
+	<hr />
+	<div>
+		<h2>List of Rooms Checked In for Breakfast</h2>
+		<form method="post">
+			<label for="BreakfastDate">Date:</label>
+			<input type="date" asp-for="SelectedDate"><br>
+			<input type="submit" value="Update List">
+		</form>
 		<table class="table">
 			<thead>
-			<tr>
-				<th>Room Number</th>
-				<th>Adults Reservations</th>
-				<th>Kids Reservations</th>
-				<th>Adults Check-In</th>
-				<th>Kids Check-In</th>
-				<th>Actions</th>
-			</tr>
+				<tr>
+					<th>Room Number</th>
+					<th>Adults Checkin</th>
+					<th>Kids Checkin</th>
+				</tr>
 			</thead>
 			<tbody>
-			@foreach (var roomReservation in Model.RoomReservations)
-			{
+				@foreach (var room in Model.CheckedInRooms)
+				{
+					<tr>
+						<td>@room.RoomNumber</td>
+						<td>@room.AdultsCheckIn</td>
+						<td>@room.KidsCheckIn</td>
+					</tr>
+				}
 				<tr>
-					<td>@roomReservation.RoomNumber</td>
-					<td>
-						<input type="number" asp-for="@roomReservation.AdultsReservations" />
-					</td>
-					<td>
-						<input type="number" asp-for="@roomReservation.KidsReservations" />
-					</td>
-					<td>
-						<input type="number" asp-for="@roomReservation.AdultsCheckIn" />
-					</td>
-					<td>
-						<input type="number" asp-for="@roomReservation.KidsCheckIn" />
-					</td>
-					
-					<td>
-						<button type="submit" class="btn btn-primary"
-						        asp-page-handler="OnPostUpdateReservation"
-						        asp-route-reservationId="@roomReservation.ReservationId"
-						        asp-route-adultsReservations="@roomReservation.AdultsReservations"
-						        asp-route-kidsReservations="@roomReservation.KidsReservations"
-						        asp-route-adultsCheckIn="@roomReservation.AdultsCheckIn"
-						        asp-route-kidsCheckIn="@roomReservation.KidsCheckIn">
-							Update
-						</button>
-					</td>
-
+					<td>Total:</td>
+					<td>@Model.TotalAdults</td>
+					<td>@Model.TotalKids</td>
 				</tr>
-			}
-			<tr>
-				<td>Total</td>
-				<td>@Model.TotalAdultReservations</td>
-				<td>@Model.TotalKidsReservations</td>
-				<td>@Model.TotalAdultsCheckIn</td>
-				<td>@Model.TotalKidsCheckIn</td>
-				<td></td>
-			</tr>
 			</tbody>
 		</table>
-	</form>
-	
+	</div>
 </div>
+
+

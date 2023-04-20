@@ -42,5 +42,45 @@ namespace SW4BED_3.Services
 
 			}
 		}
-	}
+
+        public async Task AddOrUpdateBreakfastReservation(IServiceProvider serviceProvider, DateTime date, int roomNumber, int adultsReservations, int kidsReservations)
+        {
+            using (var context = new DataDB(serviceProvider.GetRequiredService<DbContextOptions<DataDB>>()))
+            {
+                var existingReservation = context.Reservations
+                    .FirstOrDefault(r => r.RoomNumber == roomNumber && r.Date.Date == date.Date);
+
+                if (existingReservation != null)
+                {
+                    existingReservation.AdultsReservations = adultsReservations;
+                    existingReservation.KidsReservations = kidsReservations;
+                }
+                else
+                {
+                    var newReservation = new Reservations
+                    {
+                        RoomNumber = roomNumber,
+                        AdultsReservations = adultsReservations,
+                        KidsReservations = kidsReservations,
+                        AdultsCheckIn = 0,
+                        KidsCheckIn = 0,
+                        Date = date
+                    };
+                    context.Reservations.Add(newReservation);
+                }
+
+                context.SaveChanges();
+            }
+        }
+
+        public async Task<List<Reservations>> GetCheckedInRoomsAsync(IServiceProvider serviceProvider, DateTime date)
+        {
+            using var context = new DataDB(serviceProvider.GetRequiredService<DbContextOptions<DataDB>>());
+            return await context.Reservations
+                .Where(r => r.Date == date && (r.AdultsCheckIn > 0 || r.KidsCheckIn > 0))
+                .ToListAsync();
+        }
+
+
+    }
 }

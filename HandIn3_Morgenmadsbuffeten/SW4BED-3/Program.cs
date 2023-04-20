@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using SW4BED_3.Data;
 using SW4BED_3.Seed;
 using SW4BED_3.SeedUser;
+using SW4BED_3.Services;
 
 // TODO: Indsæt seed data fra gpt
 
@@ -30,7 +31,7 @@ namespace SW4BED_3
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<UserDbContext>();
 
-
+            builder.Services.AddScoped<ResturantRepository>();
 
 
 
