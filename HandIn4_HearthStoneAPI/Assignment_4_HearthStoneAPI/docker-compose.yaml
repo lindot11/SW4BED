@@ -1,18 +1,24 @@
 # Use root/example as user/password credentials
-version: '3.9'
+version: "3.9"
 
 services:
-  
-  api:
-    image: failbait/bakery:api
-    build:
-      dockerfile: Dockerfile
+  web:
+    build: .
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTPS_PORT=5001
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=crypticpassword
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/cert.pfx
+    volumes:
+      - .:/https:ro
     ports:
-      - "5000:443"
+      - 5000:443
+      - 5010:80
   mongo:
     image: mongo
     restart: always
-    ports: 
+    ports:
       - 27017:27017
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
@@ -22,7 +28,7 @@ services:
       - mongo
     image: mongo-express
     restart: always
-    ports:  
+    ports:
       - 5050:8081
     environment:
       ME_CONFIG_BASICAUTH_USERNAME: user
